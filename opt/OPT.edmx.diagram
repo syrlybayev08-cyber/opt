@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8c0a901451cf43fd810d36eb94274e1a" Name="Diagram1">
+        <EntityTypeShape EntityType="OPTModel.clients" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.delivery" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.employees" Width="1.5" PointX="8.25" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.order_products" Width="1.5" PointX="5.25" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.order_services" Width="1.5" PointX="8.25" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.orders" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.payments" Width="1.5" PointX="5.25" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.products" Width="1.5" PointX="3" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.service_assignments" Width="1.5" PointX="10.5" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="OPTModel.services" Width="1.5" PointX="6" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="OPTModel.FK__orders__client_i__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="OPTModel.FK__delivery__order___59063A47" ManuallyRouted="false" />
+        <AssociationConnector Association="OPTModel.FK__service_a__emplo__5441852A" ManuallyRouted="false" />
+        <AssociationConnector Association="OPTModel.FK__order_pro__order__48CFD27E" ManuallyRouted="false" />
+        <AssociationConnector Association="OPTModel.FK__order_pro__produ__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="OPTModel.FK__order_ser__order__4D94879B" ManuallyRouted="false" />
+        <AssociationConnector Association="OPTModel.FK__order_ser__servi__4E88ABD4" ManuallyRouted="false" />
+        <AssociationConnector Association="OPTModel.FK__service_a__order__534D60F1" ManuallyRouted="false" />
+        <AssociationConnector Association="OPTModel.FK__payments__order___5CD6CB2B" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

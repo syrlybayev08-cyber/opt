@@ -1,0 +1,720 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище OPTModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="clients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="full_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="100" />
+          <Property Name="address" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="delivery">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_id" Type="int" Nullable="false" />
+          <Property Name="delivery_address" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="estimated_delivery" Type="date" />
+          <Property Name="actual_delivery" Type="date" />
+          <Property Name="delivery_status" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="employees">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="full_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="position" Type="nvarchar" MaxLength="100" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="hire_date" Type="date" />
+          <Property Name="salary" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="order_products">
+          <Key>
+            <PropertyRef Name="order_id" />
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="order_id" Type="int" Nullable="false" />
+          <Property Name="product_id" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="price_at_time" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="order_services">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_id" Type="int" Nullable="false" />
+          <Property Name="service_id" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="price_at_time" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="client_id" Type="int" Nullable="false" />
+          <Property Name="order_date" Type="datetime" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" />
+          <Property Name="total_amount" Type="decimal" Precision="14" Scale="2" />
+          <Property Name="notes" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="payments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_id" Type="int" Nullable="false" />
+          <Property Name="amount" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="payment_date" Type="datetime" />
+          <Property Name="payment_method" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="products">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="category" Type="nvarchar" MaxLength="100" />
+          <Property Name="unit" Type="nvarchar" MaxLength="20" />
+          <Property Name="price" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="stock_quantity" Type="decimal" Precision="12" Scale="2" />
+        </EntityType>
+        <EntityType Name="service_assignments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="order_service_id" Type="int" Nullable="false" />
+          <Property Name="employee_id" Type="int" Nullable="false" />
+          <Property Name="assigned_date" Type="datetime" />
+          <Property Name="completed" Type="bit" />
+        </EntityType>
+        <EntityType Name="services">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="base_price" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="unit" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__delivery__order___59063A47">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="delivery" Type="Self.delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="delivery">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_pro__order__48CFD27E">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="order_products" Type="Self.order_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order_products">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_pro__produ__49C3F6B7">
+          <End Role="products" Type="Self.products" Multiplicity="1" />
+          <End Role="order_products" Type="Self.order_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order_products">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_ser__order__4D94879B">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="order_services" Type="Self.order_services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order_services">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_ser__servi__4E88ABD4">
+          <End Role="services" Type="Self.services" Multiplicity="1" />
+          <End Role="order_services" Type="Self.order_services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="services">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order_services">
+              <PropertyRef Name="service_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__orders__client_i__44FF419A">
+          <End Role="clients" Type="Self.clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clients">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__payments__order___5CD6CB2B">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="payments" Type="Self.payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="payments">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__service_a__emplo__5441852A">
+          <End Role="employees" Type="Self.employees" Multiplicity="1" />
+          <End Role="service_assignments" Type="Self.service_assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="service_assignments">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__service_a__order__534D60F1">
+          <End Role="order_services" Type="Self.order_services" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="service_assignments" Type="Self.service_assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order_services">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="service_assignments">
+              <PropertyRef Name="order_service_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище OPTModelContainer">
+          <EntitySet Name="clients" EntityType="Self.clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="delivery" EntityType="Self.delivery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="employees" EntityType="Self.employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order_products" EntityType="Self.order_products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="order_services" EntityType="Self.order_services" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="orders" EntityType="Self.orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="payments" EntityType="Self.payments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="products" EntityType="Self.products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="service_assignments" EntityType="Self.service_assignments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="services" EntityType="Self.services" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__delivery__order___59063A47" Association="Self.FK__delivery__order___59063A47">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="delivery" EntitySet="delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_pro__order__48CFD27E" Association="Self.FK__order_pro__order__48CFD27E">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="order_products" EntitySet="order_products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_pro__produ__49C3F6B7" Association="Self.FK__order_pro__produ__49C3F6B7">
+            <End Role="products" EntitySet="products" />
+            <End Role="order_products" EntitySet="order_products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_ser__order__4D94879B" Association="Self.FK__order_ser__order__4D94879B">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="order_services" EntitySet="order_services" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_ser__servi__4E88ABD4" Association="Self.FK__order_ser__servi__4E88ABD4">
+            <End Role="services" EntitySet="services" />
+            <End Role="order_services" EntitySet="order_services" />
+          </AssociationSet>
+          <AssociationSet Name="FK__orders__client_i__44FF419A" Association="Self.FK__orders__client_i__44FF419A">
+            <End Role="clients" EntitySet="clients" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__payments__order___5CD6CB2B" Association="Self.FK__payments__order___5CD6CB2B">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="payments" EntitySet="payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__service_a__emplo__5441852A" Association="Self.FK__service_a__emplo__5441852A">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="service_assignments" EntitySet="service_assignments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__service_a__order__534D60F1" Association="Self.FK__service_a__order__534D60F1">
+            <End Role="order_services" EntitySet="order_services" />
+            <End Role="service_assignments" EntitySet="service_assignments" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="OPTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="clients">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="orders" Relationship="Self.FK__orders__client_i__44FF419A" FromRole="clients" ToRole="orders" />
+        </EntityType>
+        <EntityType Name="delivery">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_id" Type="Int32" Nullable="false" />
+          <Property Name="delivery_address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="estimated_delivery" Type="DateTime" Precision="0" />
+          <Property Name="actual_delivery" Type="DateTime" Precision="0" />
+          <Property Name="delivery_status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="orders" Relationship="Self.FK__delivery__order___59063A47" FromRole="delivery" ToRole="orders" />
+        </EntityType>
+        <EntityType Name="employees">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="position" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="hire_date" Type="DateTime" Precision="0" />
+          <Property Name="salary" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="service_assignments" Relationship="Self.FK__service_a__emplo__5441852A" FromRole="employees" ToRole="service_assignments" />
+        </EntityType>
+        <EntityType Name="order_products">
+          <Key>
+            <PropertyRef Name="order_id" />
+            <PropertyRef Name="product_id" />
+          </Key>
+          <Property Name="order_id" Type="Int32" Nullable="false" />
+          <Property Name="product_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="price_at_time" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <NavigationProperty Name="orders" Relationship="Self.FK__order_pro__order__48CFD27E" FromRole="order_products" ToRole="orders" />
+          <NavigationProperty Name="products" Relationship="Self.FK__order_pro__produ__49C3F6B7" FromRole="order_products" ToRole="products" />
+        </EntityType>
+        <EntityType Name="order_services">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_id" Type="Int32" Nullable="false" />
+          <Property Name="service_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="price_at_time" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="orders" Relationship="Self.FK__order_ser__order__4D94879B" FromRole="order_services" ToRole="orders" />
+          <NavigationProperty Name="services" Relationship="Self.FK__order_ser__servi__4E88ABD4" FromRole="order_services" ToRole="services" />
+          <NavigationProperty Name="service_assignments" Relationship="Self.FK__service_a__order__534D60F1" FromRole="order_services" ToRole="service_assignments" />
+        </EntityType>
+        <EntityType Name="orders">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="client_id" Type="Int32" Nullable="false" />
+          <Property Name="order_date" Type="DateTime" Precision="3" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="total_amount" Type="Decimal" Precision="14" Scale="2" />
+          <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="clients" Relationship="Self.FK__orders__client_i__44FF419A" FromRole="orders" ToRole="clients" />
+          <NavigationProperty Name="delivery" Relationship="Self.FK__delivery__order___59063A47" FromRole="orders" ToRole="delivery" />
+          <NavigationProperty Name="order_products" Relationship="Self.FK__order_pro__order__48CFD27E" FromRole="orders" ToRole="order_products" />
+          <NavigationProperty Name="order_services" Relationship="Self.FK__order_ser__order__4D94879B" FromRole="orders" ToRole="order_services" />
+          <NavigationProperty Name="payments" Relationship="Self.FK__payments__order___5CD6CB2B" FromRole="orders" ToRole="payments" />
+        </EntityType>
+        <EntityType Name="payments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_id" Type="Int32" Nullable="false" />
+          <Property Name="amount" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="payment_date" Type="DateTime" Precision="3" />
+          <Property Name="payment_method" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="orders" Relationship="Self.FK__payments__order___5CD6CB2B" FromRole="payments" ToRole="orders" />
+        </EntityType>
+        <EntityType Name="products">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="category" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="unit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="stock_quantity" Type="Decimal" Precision="12" Scale="2" />
+          <NavigationProperty Name="order_products" Relationship="Self.FK__order_pro__produ__49C3F6B7" FromRole="products" ToRole="order_products" />
+        </EntityType>
+        <EntityType Name="service_assignments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="order_service_id" Type="Int32" Nullable="false" />
+          <Property Name="employee_id" Type="Int32" Nullable="false" />
+          <Property Name="assigned_date" Type="DateTime" Precision="3" />
+          <Property Name="completed" Type="Boolean" />
+          <NavigationProperty Name="employees" Relationship="Self.FK__service_a__emplo__5441852A" FromRole="service_assignments" ToRole="employees" />
+          <NavigationProperty Name="order_services" Relationship="Self.FK__service_a__order__534D60F1" FromRole="service_assignments" ToRole="order_services" />
+        </EntityType>
+        <EntityType Name="services">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="base_price" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="order_services" Relationship="Self.FK__order_ser__servi__4E88ABD4" FromRole="services" ToRole="order_services" />
+        </EntityType>
+        <Association Name="FK__orders__client_i__44FF419A">
+          <End Role="clients" Type="Self.clients" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="orders" Type="Self.orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clients">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="orders">
+              <PropertyRef Name="client_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__delivery__order___59063A47">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="delivery" Type="Self.delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="delivery">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__service_a__emplo__5441852A">
+          <End Role="employees" Type="Self.employees" Multiplicity="1" />
+          <End Role="service_assignments" Type="Self.service_assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="service_assignments">
+              <PropertyRef Name="employee_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_pro__order__48CFD27E">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="order_products" Type="Self.order_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order_products">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_pro__produ__49C3F6B7">
+          <End Role="products" Type="Self.products" Multiplicity="1" />
+          <End Role="order_products" Type="Self.order_products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="products">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order_products">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_ser__order__4D94879B">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="order_services" Type="Self.order_services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order_services">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__order_ser__servi__4E88ABD4">
+          <End Role="services" Type="Self.services" Multiplicity="1" />
+          <End Role="order_services" Type="Self.order_services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="services">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="order_services">
+              <PropertyRef Name="service_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__service_a__order__534D60F1">
+          <End Role="order_services" Type="Self.order_services" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="service_assignments" Type="Self.service_assignments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="order_services">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="service_assignments">
+              <PropertyRef Name="order_service_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__payments__order___5CD6CB2B">
+          <End Role="orders" Type="Self.orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="payments" Type="Self.payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="orders">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="payments">
+              <PropertyRef Name="order_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="OPTEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="clients" EntityType="Self.clients" />
+          <EntitySet Name="delivery" EntityType="Self.delivery" />
+          <EntitySet Name="employees" EntityType="Self.employees" />
+          <EntitySet Name="order_products" EntityType="Self.order_products" />
+          <EntitySet Name="order_services" EntityType="Self.order_services" />
+          <EntitySet Name="orders" EntityType="Self.orders" />
+          <EntitySet Name="payments" EntityType="Self.payments" />
+          <EntitySet Name="products" EntityType="Self.products" />
+          <EntitySet Name="service_assignments" EntityType="Self.service_assignments" />
+          <EntitySet Name="services" EntityType="Self.services" />
+          <AssociationSet Name="FK__orders__client_i__44FF419A" Association="Self.FK__orders__client_i__44FF419A">
+            <End Role="clients" EntitySet="clients" />
+            <End Role="orders" EntitySet="orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__delivery__order___59063A47" Association="Self.FK__delivery__order___59063A47">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="delivery" EntitySet="delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK__service_a__emplo__5441852A" Association="Self.FK__service_a__emplo__5441852A">
+            <End Role="employees" EntitySet="employees" />
+            <End Role="service_assignments" EntitySet="service_assignments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_pro__order__48CFD27E" Association="Self.FK__order_pro__order__48CFD27E">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="order_products" EntitySet="order_products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_pro__produ__49C3F6B7" Association="Self.FK__order_pro__produ__49C3F6B7">
+            <End Role="products" EntitySet="products" />
+            <End Role="order_products" EntitySet="order_products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_ser__order__4D94879B" Association="Self.FK__order_ser__order__4D94879B">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="order_services" EntitySet="order_services" />
+          </AssociationSet>
+          <AssociationSet Name="FK__order_ser__servi__4E88ABD4" Association="Self.FK__order_ser__servi__4E88ABD4">
+            <End Role="services" EntitySet="services" />
+            <End Role="order_services" EntitySet="order_services" />
+          </AssociationSet>
+          <AssociationSet Name="FK__service_a__order__534D60F1" Association="Self.FK__service_a__order__534D60F1">
+            <End Role="order_services" EntitySet="order_services" />
+            <End Role="service_assignments" EntitySet="service_assignments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__payments__order___5CD6CB2B" Association="Self.FK__payments__order___5CD6CB2B">
+            <End Role="orders" EntitySet="orders" />
+            <End Role="payments" EntitySet="payments" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище OPTModelContainer" CdmEntityContainer="OPTEntities1">
+          <EntitySetMapping Name="clients">
+            <EntityTypeMapping TypeName="OPTModel.clients">
+              <MappingFragment StoreEntitySet="clients">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="address" ColumnName="address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="delivery">
+            <EntityTypeMapping TypeName="OPTModel.delivery">
+              <MappingFragment StoreEntitySet="delivery">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="delivery_address" ColumnName="delivery_address" />
+                <ScalarProperty Name="estimated_delivery" ColumnName="estimated_delivery" />
+                <ScalarProperty Name="actual_delivery" ColumnName="actual_delivery" />
+                <ScalarProperty Name="delivery_status" ColumnName="delivery_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employees">
+            <EntityTypeMapping TypeName="OPTModel.employees">
+              <MappingFragment StoreEntitySet="employees">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="hire_date" ColumnName="hire_date" />
+                <ScalarProperty Name="salary" ColumnName="salary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order_products">
+            <EntityTypeMapping TypeName="OPTModel.order_products">
+              <MappingFragment StoreEntitySet="order_products">
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="price_at_time" ColumnName="price_at_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="order_services">
+            <EntityTypeMapping TypeName="OPTModel.order_services">
+              <MappingFragment StoreEntitySet="order_services">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="service_id" ColumnName="service_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="price_at_time" ColumnName="price_at_time" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="orders">
+            <EntityTypeMapping TypeName="OPTModel.orders">
+              <MappingFragment StoreEntitySet="orders">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="client_id" ColumnName="client_id" />
+                <ScalarProperty Name="order_date" ColumnName="order_date" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="total_amount" ColumnName="total_amount" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="payments">
+            <EntityTypeMapping TypeName="OPTModel.payments">
+              <MappingFragment StoreEntitySet="payments">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="payment_date" ColumnName="payment_date" />
+                <ScalarProperty Name="payment_method" ColumnName="payment_method" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="products">
+            <EntityTypeMapping TypeName="OPTModel.products">
+              <MappingFragment StoreEntitySet="products">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="category" ColumnName="category" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="stock_quantity" ColumnName="stock_quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="service_assignments">
+            <EntityTypeMapping TypeName="OPTModel.service_assignments">
+              <MappingFragment StoreEntitySet="service_assignments">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="order_service_id" ColumnName="order_service_id" />
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+                <ScalarProperty Name="assigned_date" ColumnName="assigned_date" />
+                <ScalarProperty Name="completed" ColumnName="completed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="services">
+            <EntityTypeMapping TypeName="OPTModel.services">
+              <MappingFragment StoreEntitySet="services">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="base_price" ColumnName="base_price" />
+                <ScalarProperty Name="unit" ColumnName="unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
